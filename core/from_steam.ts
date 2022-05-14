@@ -809,7 +809,7 @@ async function farm_cave(server) {
 }
 
 async function run() {
-    await Promise.all([AL.Game.loginJSONFile("credentials.json"), AL.Game.getGData(true)])
+    await Promise.all([AL.Game.loginJSONFile("../credentials.json"), AL.Game.getGData(true)])
     await AL.Pathfinder.prepare(AL.Game.G)
 
     farm_cave(["EU", "II"]);
