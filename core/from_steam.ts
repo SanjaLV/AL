@@ -1,5 +1,6 @@
 import AL, {Warrior, Priest, PingCompensatedCharacter, Entity, ItemName, IPosition} from "alclient"
 import assert from 'assert';
+import * as fs from "fs";
 
 function get_player(player, name) {
     return player.players.get(name);
@@ -680,6 +681,31 @@ async function HELPER_shoping(bot: PingCompensatedCharacter) {
     console.log(bot.name + ">EMPTY SPACES " + free_cnt);
 }
 
+class StatReport {
+    time: string
+    gold: number
+    death: string
+    kills: string
+
+    constructor (t: string,
+                 g: number,
+                 d: Map<string,number>,
+                 k: Map<string,number>) {
+        this.time = t;
+        this.gold = g;
+        this.death = JSON.stringify(d);
+        this.kills = JSON.stringify(k);
+    }
+
+    public save_to_file(filename:string) {
+        fs.writeFile(filename,JSON.stringify(this),function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+    }
+}
+
 async function farm_cave(server) {
     const tank  = await AL.Game.startWarrior("GHTank", server[0], server[1]);
     //const rogue = await AL.Game.startRogue("GHRogue", server[0], server[1]);
@@ -742,6 +768,9 @@ async function farm_cave(server) {
 
         last_gold = cur_gold;
         last_time = Date.now();
+
+        const report = new StatReport(time, tot_gold, party.death_count, party.kills_count);
+        report.save_to_file("STAT.json");
     }
 
     cur_hunt_index = 0;
