@@ -1,0 +1,17 @@
+[Unit]
+Description=AL bots
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/AL
+ExecStart=/home/ubuntu/.nvm/versions/node/v16.15.0/bin/node build/from_steam.js
+StandardOutput=null
+StandardError=journal
+Restart=always
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target
+
