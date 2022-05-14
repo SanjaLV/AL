@@ -1,0 +1,27 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "ESNext",
+        "lib": [
+            "ES2020",
+            "DOM"
+        ],
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "incremental": false,
+        "target": "ES2020",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "outDir": "build",
+        "removeComments": true,
+        "rootDir": "core",
+        "sourceMap": false,
+        "watch": false
+    },
+    "include": [
+        "core/from_steam.ts",
+    ],
+    "exclude": [
+        "node_modules",
+    ]
+}
