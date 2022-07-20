@@ -18,6 +18,17 @@ const KILL_TO_NEXT = 100;
 const GO_SHOPING_AFTER = 7;
 const SPECIALS = ["cutebee", "goldenbat", "phoenix", "mvampire", "wabbit"];
 
+function get_human_readable_date() {
+    const d = new Date();
+    return d.getFullYear() + "_" +
+           d.getMonth() + "_" +
+           d.getDate() + "_" +
+           d.getHours() + "_" +
+           d.getMinutes();
+}
+
+const stat_file_suffix = get_human_readable_date();
+
 function get_target(player, type) {
     let best = undefined;
     let dist = 99999;
@@ -572,7 +583,7 @@ async function buy_many(bot: PingCompensatedCharacter, item: ItemName, limit: nu
 async function HELPER_upgrade(bot: PingCompensatedCharacter) {
     const ITEMS_TO_UPGRADE: Array<ItemName> = ["firestaff", "fireblade"];
     const SCROLL_TO_USE: ItemName = "scroll1";
-    const LEVEL_TO_UPGRADE: number = 6;
+    const LEVEL_TO_UPGRADE: number = 8;
     const GOLD_TO_LEAVE: number = 500000;
 
     let retry_cnt = 0;
@@ -693,8 +704,19 @@ class StatReport {
                  k: Map<string,number>) {
         this.time = t;
         this.gold = g;
-        this.death = JSON.stringify(d);
-        this.kills = JSON.stringify(k);
+
+        let jsonDeath = {};
+        d.forEach( (value, key) => {
+            jsonDeath[key] = value;
+        });
+
+        let jsonKills = {};
+        k.forEach( (value, key) => {
+            jsonKills[key] = value;
+        });
+
+        this.death = JSON.stringify(jsonDeath);
+        this.kills = JSON.stringify(jsonKills);
     }
 
     public save_to_file(filename:string) {
@@ -769,8 +791,8 @@ async function farm_cave(server) {
         last_gold = cur_gold;
         last_time = Date.now();
 
-        const report = new StatReport(time, tot_gold, party.death_count, party.kills_count);
-        report.save_to_file("STAT.json");
+        const report = new StatReport(tot_time.toFixed(2), tot_gold, party.death_count, party.kills_count);
+        report.save_to_file("stat/run_" + stat_file_suffix + ".json");
     }
 
     cur_hunt_index = 0;

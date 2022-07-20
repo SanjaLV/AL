@@ -2,4 +2,4 @@ build/
 G_*.json
 node_modules/
 package-lock.json
-STAT.json
+stat/
